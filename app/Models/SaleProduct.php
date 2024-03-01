@@ -21,4 +21,14 @@ class SaleProduct extends Model
     {
         return $this->hasMany(Sale::class); //tem mts vendas
     }
+
+    public function getPriceAttribute()
+    {
+        return $this->attributes['price'] / 100; // 2990 -> 29.90
+    }
+
+    public function setPriceAttribute($attr)
+    {
+        return $this->attributes['price'] = $attr * 100; //29.90 2990
+    }
 }
