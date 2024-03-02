@@ -28,11 +28,24 @@ class DatabaseSeeder extends Seeder
         ->has(\App\Models\Sale::factory())
         ->has(\App\Models\Product::factory(2))
         ->create();*/
+
         
+        \App\Models\Product::factory(5)->create();
+
+        $product_id = \App\Models\Product::all()->random()->id;
+        $product = \App\Models\Product::find($product_id);
+
         \App\Models\SaleProduct::factory(1)->create([
             'sale_id' => \App\Models\Sale::factory(),
-            'product_id' => \App\Models\Product::factory(),
+            'product_id' => $product_id,
+            'price' => $product->price
         ]);
+
+        
+        /*\App\Models\SaleProduct::factory(1)->create([
+            'sale_id' => \App\Models\Sale::factory(),
+            'product_id' => \App\Models\Product::factory(),
+        ]);*/
 
     }
 }
