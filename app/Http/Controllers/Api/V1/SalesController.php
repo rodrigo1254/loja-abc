@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sale;
+use App\Http\Resources\V1\SaleResource;
 
 class SalesController extends Controller
 {
@@ -13,7 +14,8 @@ class SalesController extends Controller
      */
     public function index()
     {
-        return Sale::all();
+        $sales = Sale::with('saleProducts.product')->get();
+        return SaleResource::collection($sales);
     }
 
     /**
@@ -35,9 +37,9 @@ class SalesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Sale $sale)
     {
-        //
+        return new SaleResource($sale);
     }
 
     /**

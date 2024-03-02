@@ -15,7 +15,6 @@ class Product extends Model
     public function saleProducts()
     {
         return $this->hasMany(SaleProduct::class);
-        //return $this->belongsTo(SaleProduct::class);
     }
 
     public function getPriceAttribute()

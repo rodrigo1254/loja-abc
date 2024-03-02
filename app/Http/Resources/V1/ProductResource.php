@@ -7,6 +7,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
 {
+    protected $amount;
+
+    public function __construct($resource, $amount = null)
+    {
+        parent::__construct($resource);
+        $this->amount = $amount;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -14,10 +22,17 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
+            'product_id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
-            'description' => $this->description,
+            //'description' => $this->description,
         ];
+
+        if ($this->amount !== null) {
+            $data['amount'] = $this->amount;
+        }
+
+        return $data;
     }
 }

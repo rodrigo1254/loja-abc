@@ -24,16 +24,14 @@ class SaleProduct extends Model
 
     protected $fillable = ['name,','price','description'];
 
-    public function sales()
+    public function sale()
     {
         return $this->belongsTo(Sale::class);
-        //return $this->hasMany(Sale::class); 
     }
 
-    public function products()
+    public function product()
     {
         return $this->belongsTo(Product::class);
-        //return $this->hasMany(Product::class); 
     }
 
     public function getPriceAttribute()
