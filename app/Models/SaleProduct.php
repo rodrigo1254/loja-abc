@@ -12,7 +12,7 @@ class SaleProduct extends Model
 
     //protected $fillable = ['name,','price','description'];
 
-    public function products()
+    /*public function products()
     {
         return $this->hasMany(Product::class); //tem mts produtos
     }
@@ -20,6 +20,20 @@ class SaleProduct extends Model
     public function sales()
     {
         return $this->hasMany(Sale::class); //tem mts vendas
+    }*/
+
+    protected $fillable = ['name,','price','description'];
+
+    public function sales()
+    {
+        return $this->belongsTo(Sale::class);
+        //return $this->hasMany(Sale::class); 
+    }
+
+    public function products()
+    {
+        return $this->belongsTo(Product::class);
+        //return $this->hasMany(Product::class); 
     }
 
     public function getPriceAttribute()

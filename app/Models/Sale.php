@@ -9,4 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Sale extends Model
 {
     use HasFactory,SoftDeletes;
+
+    public function saleProducts()
+    {
+        return $this->hasMany(SaleProduct::class);
+        //return $this->belongsTo(SaleProduct::class);
+    }
+
 }

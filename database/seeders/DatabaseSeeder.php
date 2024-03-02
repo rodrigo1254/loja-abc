@@ -19,7 +19,20 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        \App\Models\Product::factory(10)->create();
+        /*\App\Models\SaleProduct::factory(2)
+            ->hasSales()   
+            ->hasProducts()
+            ->create();*/
+
+        /*\App\Models\SaleProduct::factory(2)
+        ->has(\App\Models\Sale::factory())
+        ->has(\App\Models\Product::factory(2))
+        ->create();*/
         
+        \App\Models\SaleProduct::factory(1)->create([
+            'sale_id' => \App\Models\Sale::factory(),
+            'product_id' => \App\Models\Product::factory(),
+        ]);
+
     }
 }
