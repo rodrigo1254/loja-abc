@@ -38,15 +38,10 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         try {
-            /*$validator = Validator::make($request->all(),[
-                'product_id' => 'required',
-                'amount' => 'required|numeric|between:0,100',
-            ]);*/
-
             $validator = Validator::make($request->all(), [
-                'products' => 'required|array', // Certifica-se de que 'products' é um array
-                'products.*.product_id' => 'required', // Valida cada 'product_id'
-                'products.*.amount' => 'required|numeric|between:0,100', // Valida cada 'amount'
+                'products' => 'required|array',
+                'products.*.product_id' => 'required',
+                'products.*.amount' => 'required|numeric|between:0,100',
             ]);
 
             if ($validator->fails()) {
@@ -58,7 +53,7 @@ class SalesController extends Controller
             $createdSaleProducts = [];
 
             foreach ($productsData as $productData) {
-                
+
                 $product = Product::find($productData['product_id']);
                 if (!$product) {
                     return $this->error('Produto não encontrado', 404, []);
@@ -82,8 +77,12 @@ class SalesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sale $sale)
+    public function show(int $int)
     {
+        $sale = Sale::find($int);
+        if (!$sale) {
+            return $this->error('Venda não encontrada',404,[]);
+        }
         return new SaleResource($sale);
     }
 

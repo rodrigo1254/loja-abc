@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('status_id')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
