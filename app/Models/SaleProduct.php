@@ -10,6 +10,13 @@ class SaleProduct extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $fillable = [
+        'sale_id',
+        'product_id',
+        'amount',
+        'price'
+    ];
+
     public function sale()
     {
         return $this->belongsTo(Sale::class);

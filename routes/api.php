@@ -20,5 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('sales',['App\Http\Controllers\Api\V1\SalesController','index']);
 Route::get('sales/{sale}',['App\Http\Controllers\Api\V1\SalesController','show']);
+Route::post('sales',['App\Http\Controllers\Api\V1\SalesController','store']);
+Route::put('sales/{sale}',['App\Http\Controllers\Api\V1\SalesController','update']);
+
 Route::get('products',['App\Http\Controllers\Api\V1\ProductsController','index']);
 Route::get('products/{product}',['App\Http\Controllers\Api\V1\ProductsController','show']);
