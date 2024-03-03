@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Http\Resources\V1\SaleResource;
 use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\V1\SaleProductResource;
 
 class SalesController extends Controller
 {
@@ -37,32 +38,41 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),[
+            /*$validator = Validator::make($request->all(),[
                 'product_id' => 'required',
                 'amount' => 'required|numeric|between:0,100',
+            ]);*/
+
+            $validator = Validator::make($request->all(), [
+                'products' => 'required|array', // Certifica-se de que 'products' é um array
+                'products.*.product_id' => 'required', // Valida cada 'product_id'
+                'products.*.amount' => 'required|numeric|between:0,100', // Valida cada 'amount'
             ]);
 
             if ($validator->fails()) {
                 return $this->error('Dados inválidos',422,$validator->errors());
             }
 
-            $validatedData = $validator->validate();
+            $productsData = $validator->validated()['products'];
 
-            $product = Product::find($validatedData['product_id']);
+            $createdSaleProducts = [];
 
-            if (!$product) {
-                return $this->response('Produto não existe',400,[]);
+            foreach ($productsData as $productData) {
+                
+                $product = Product::find($productData['product_id']);
+                if (!$product) {
+                    return $this->error('Produto não encontrado', 404, []);
+                }
+        
+                $productData['price'] = $product->price;
+                $saleId = Sale::create([])->id;
+                $productData['sale_id'] = $saleId;
+                $saleProduct = SaleProduct::create($productData);
+
+                $createdSaleProducts[] = $saleProduct;
             }
 
-            $validatedData['price'] = $product->price;
-            $validatedData['sale_id'] = Sale::create([])->id;
-
-            $saleProduct = SaleProduct::create($validatedData);
-
-            if ($saleProduct) {
-                return $this->response('Venda realizada com sucesso',200,$saleProduct);
-            }
-            return $this->error('Venda não cadastrada',400,[]);
+            return $this->response('Vendas realizadas com sucesso', 200, SaleProductResource::collection($createdSaleProducts));
 
         } catch (\Exception $e) {
             return $this->error($e->getMessage(),400,[]);
