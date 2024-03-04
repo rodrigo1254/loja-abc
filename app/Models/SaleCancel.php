@@ -10,7 +10,8 @@ class SaleCancel extends Model
     use HasFactory;
 
     protected $fillable = [
-        'observation'
+        'observation',
+        'sale_id'
     ];
 
 }

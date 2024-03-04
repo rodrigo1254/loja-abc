@@ -11,4 +11,14 @@ return [
         7 => 'DEVOLVIDO',
         8 => 'REEMBOLSADO',
     ],
+    'status_reverse' => [
+        'PENDENTE' => 1,
+        'EM PROCESSAMENTO' => 2,
+        'CONFIRMADO' => 3,
+        'EM TRÂNSITO' => 4,
+        'ENTREGUE' => 5,
+        'CANCELADO' => 6,
+        'DEVOLVIDO' => 7,
+        'REEMBOLSADO' => 8,
+    ],
 ];

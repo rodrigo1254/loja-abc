@@ -19,7 +19,7 @@ class SalesController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->only([
-            'store', 'update', 'cancel', 'index'
+            'store', 'update', 'cancel'
         ]);
     }
     
@@ -30,14 +30,6 @@ class SalesController extends Controller
     {
         $sales = Sale::with('saleProducts.product')->get();
         return SaleResource::collection($sales);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -154,13 +146,13 @@ class SalesController extends Controller
                 return $this->error('Dados inválidos', 422, $validator->errors());
             }
 
-            $sale->status = '6';
+            $sale->status = config('constants.status_reverse.CANCELADO'); //STATUS cancelado
             $sale->save();
 
             $saleCancel = SaleCancel::updateOrCreate(
-                ['sale_id' => $id],
-                ['observation' => $request->input('reason')]
-            );            
+                ['sale_id' => $id], // Certifique-se de que $id contém o valor correto do sale_id
+                ['sale_id' => $id, 'observation' => $request->input('reason')] // Inclua 'sale_id' aqui
+            );         
 
             return $this->response(
                 'Venda cancelada com sucesso', 
