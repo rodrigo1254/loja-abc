@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\V1\ProductsController;
 
 
 Route::apiResource('sales',SalesController::class);
-
 Route::put('sales/{id}/cancel', [SalesController::class, 'cancel']);
 Route::post('sales/{id}', [SalesController::class, 'addProductsToSale']);
 
