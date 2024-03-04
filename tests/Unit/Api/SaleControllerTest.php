@@ -8,6 +8,7 @@ use App\Models\Sale;
 use App\Models\SaleCancel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use App\Constants;
 
 class SaleControllerTest extends TestCase
 {
@@ -141,7 +142,7 @@ class SaleControllerTest extends TestCase
         // Verificar se a venda foi cancelada no banco de dados
         $this->assertDatabaseHas('sales', [
             'id' => $sale->id,
-            'status' => config('constants.status_reverse.CANCELADO')
+            'status' => Constants::STATUS_CANCELADO
         ]);
 
         // Verificar se o registro de cancelamento da venda foi criado no banco de dados

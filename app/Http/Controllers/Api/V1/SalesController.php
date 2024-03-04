@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Http\Resources\V1\SaleResource;
 use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
+use App\Constants;
 
 class SalesController extends Controller
 {
@@ -39,12 +40,7 @@ class SalesController extends Controller
     {
         try {
 
-            
-            $validator = Validator::make($request->all(), [
-                'products' => 'required|array',
-                'products.*.product_id' => 'required',
-                'products.*.amount' => 'required|numeric|between:0,100',
-            ]);
+            $validator = $this->validateSaleData($request->all());
         
             if ($validator->fails()) {
                 return $this->error('Dados inválidos', 422, $validator->errors());
@@ -127,12 +123,12 @@ class SalesController extends Controller
                 return $this->error('Dados inválidos', 422, $validator->errors());
             }
 
-            $sale->status = config('constants.status_reverse.CANCELADO'); //STATUS cancelado
+            $sale->status = Constants::STATUS_CANCELADO;
             $sale->save();
 
             $saleCancel = SaleCancel::updateOrCreate(
-                ['sale_id' => $id], // Certifique-se de que $id contém o valor correto do sale_id
-                ['sale_id' => $id, 'observation' => $request->input('reason')] // Inclua 'sale_id' aqui
+                ['sale_id' => $id],
+                ['sale_id' => $id, 'observation' => $request->input('reason')]
             );         
 
             return $this->response(
@@ -151,12 +147,7 @@ class SalesController extends Controller
     public function addProductsToSale(Request $request, $saleId)
     {
         try {
-            // Validação dos dados recebidos
-            $validator = Validator::make($request->all(), [
-                'products' => 'required|array',
-                'products.*.product_id' => 'required',
-                'products.*.amount' => 'required|numeric|between:0,100',
-            ]);
+            $validator = $this->validateSaleData($request->all());
 
             if ($validator->fails()) {
                 return $this->error('Dados inválidos', 422, $validator->errors());
@@ -196,6 +187,15 @@ class SalesController extends Controller
         } catch (\Exception $e) {
             return $this->error($e->getMessage(), 500);
         }
+    }
+
+    private function validateSaleData(array $data)
+    {
+        return Validator::make($data, [
+            'products' => 'required|array',
+            'products.*.product_id' => 'required',
+            'products.*.amount' => 'required|numeric|between:0,100',
+        ]);
     }
 
 }

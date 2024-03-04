@@ -4,10 +4,7 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
-use Illuminate\Support\Facades\DB;
-
-use App\Models\Sale;
+use App\Constants;
 
 class SaleResource extends JsonResource
 {
@@ -27,7 +24,7 @@ class SaleResource extends JsonResource
         $returnArray = [
             'sales_id' => $this->id,
             'amount' => $totalAmount,
-            'status' => config('constants.status.' . ($this->status ?? 1)),
+            'status' => Constants::STATUS_TEXT[$this->status ?? 1]
         ];
 
         if ($this->saleCancels->isNotEmpty()) {
