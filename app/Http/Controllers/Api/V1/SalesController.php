@@ -18,9 +18,9 @@ class SalesController extends Controller
 
     public function __construct()
     {
-        /*$this->middleware('auth:sanctum')->only([
+        $this->middleware('auth:sanctum')->only([
             'store', 'update', 'cancel','addProductsToSale'
-        ]);*/
+        ]);
     }
     
     /**
@@ -38,6 +38,8 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         try {
+
+            
             $validator = Validator::make($request->all(), [
                 'products' => 'required|array',
                 'products.*.product_id' => 'required',
@@ -195,8 +197,5 @@ class SalesController extends Controller
             return $this->error($e->getMessage(), 500);
         }
     }
-
-
-
 
 }
