@@ -26,7 +26,6 @@ class ProductResource extends JsonResource
             'product_id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
-            //'description' => $this->description,
         ];
 
         if ($this->amount !== null) {

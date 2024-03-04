@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Validator;
 class SalesController extends Controller
 {
     use HttpResponse;
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only([
+            'store', 'update', 'cancel', 'index'
+        ]);
+    }
+    
     /**
      * Display a listing of the resource.
      */
