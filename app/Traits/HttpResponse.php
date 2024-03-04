@@ -13,7 +13,7 @@ trait HttpResponse
         ]);
     }  
     
-    public function error($message, $status = [], $errors, $data = [])
+    public function error($message, $status = [], $errors = [], $data = [])
     {
         return response()->json([
             'message' => $message,

@@ -28,6 +28,19 @@ services:
     networks:
       - dockernetworks
 
+  db-testing:
+    image: mysql
+    restart: always
+    ports: 
+      - 3309:3306 #para acessar da minha maquina
+    environment:
+      MYSQL_ROOT_PASSWORD: docker
+      MYSQL_DATABASE: testing
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    networks:
+      - dockernetworks
+
 networks:
   dockernetworks:
     driver: bridge

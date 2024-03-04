@@ -18,9 +18,9 @@ class SalesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only([
-            'store', 'update', 'cancel'
-        ]);
+        /*$this->middleware('auth:sanctum')->only([
+            'store', 'update', 'cancel','addProductsToSale'
+        ]);*/
     }
     
     /**
@@ -38,6 +38,7 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         try {
+            $variavelNaoDefinida = $variavelInexistente;
             $validator = Validator::make($request->all(), [
                 'products' => 'required|array',
                 'products.*.product_id' => 'required',
@@ -74,7 +75,7 @@ class SalesController extends Controller
             );            
 
         } catch (\Exception $e) {
-            return $this->error($e->getMessage(), 400, []);
+            return $this->error($e->getMessage(), 500, []);
         }
     }
 
@@ -95,28 +96,7 @@ class SalesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        try{
-            $validator = Validator::make($request->all(),[
-                'product_id' => 'required',
-                'amount' => 'required|numeric|between:0,100',
-                'sale_id' => 'required'
-            ]);
-
-            $validate = $validator->validate();
-
-            $updated = SaleProduct::find($id)->update([
-                'amount' => 555
-            ]);
-
-            var_dump($updated);
-            exit;
-
-            //$data = SaleProduct->update($request->all());
-
-            //return response()->json(['status' => true, 'contact' => $data],200);
-        }catch (\Exception $e){
-            return $this->error('Erro ' . $e->getMessage(),500,[]);
-        }
+        //
     }
 
     /**
@@ -163,5 +143,61 @@ class SalesController extends Controller
             return $this->error('Erro ao cancelar a venda: ' . $e->getMessage(), 500, []);
         }
     }
+
+    /**
+     * Adiciona mais produtos a uma venda
+     */
+    public function addProductsToSale(Request $request, $saleId)
+    {
+        try {
+            // Validação dos dados recebidos
+            $validator = Validator::make($request->all(), [
+                'products' => 'required|array',
+                'products.*.product_id' => 'required',
+                'products.*.amount' => 'required|numeric|between:0,100',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->error('Dados inválidos', 422, $validator->errors());
+            }
+
+            // Verifica se a venda existe
+            $sale = Sale::find($saleId);
+            if (!$sale) {
+                return $this->error('Venda não encontrada',404,[]);
+            }
+
+            foreach ($request->input('products') as $productData) {
+                $product = Product::find($productData['product_id']);
+                if (!$product) {
+                    return $this->error('Produto não encontrado', 404);
+                }
+
+                $saleProduct = SaleProduct::updateOrCreate(
+                    [
+                        'sale_id' => $sale->id,
+                        'product_id' => $productData['product_id'],
+                    ],
+                    [
+                        'amount' => $productData['amount'],
+                        'price' => $product->price,
+                    ]
+                );
+            }
+            $sale->load('saleProducts.product');
+
+            return $this->response(
+                'Produtos adicionados à venda com sucesso',
+                200,
+                new SaleResource($sale)
+            );
+
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 500);
+        }
+    }
+
+
+
 
 }

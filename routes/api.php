@@ -22,6 +22,7 @@ use App\Http\Controllers\AuthController;
 Route::apiResource('sales','App\Http\Controllers\Api\V1\SalesController');
 
 Route::put('sales/{id}/cancel', ['App\Http\Controllers\Api\V1\SalesController', 'cancel']);
+Route::post('sales/{id}', ['App\Http\Controllers\Api\V1\SalesController', 'addProductsToSale']);
 
 /*
 Route::get('sales',['App\Http\Controllers\Api\V1\SalesController','index']);
