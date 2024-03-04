@@ -35,4 +35,14 @@ class ProductResource extends JsonResource
 
         return $data;
     }
+
+    public function toCustomArray()
+    {
+        return [
+            'product_id' => $this->id,
+            'name' => $this->name,
+            'price' => $this->price,
+            'description' => $this->description,
+        ];
+    }
 }

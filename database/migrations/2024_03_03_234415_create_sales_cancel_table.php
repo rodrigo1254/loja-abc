@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales', function (Blueprint $table) {
+        Schema::create('sale_cancels', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('status')->default(1);
+            $table->unsignedBigInteger('sale_id');
+            $table->text('observation')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+
+            // Definindo a chave estrangeira para a tabela 'sales'
+            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sales');
+        Schema::dropIfExists('sales_cancel');
     }
 };

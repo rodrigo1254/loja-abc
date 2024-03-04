@@ -10,9 +10,18 @@ class Sale extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $fillable = [
+        'status'
+    ];
+
     public function saleProducts()
     {
         return $this->hasMany(SaleProduct::class);
+    }
+
+    public function saleCancels()
+    {
+        return $this->hasMany(SaleCancel::class);
     }
 
 }

@@ -20,15 +20,24 @@ class SaleResource extends JsonResource
     {
         $totalAmount = 0;
 
-        //calculando total
         foreach ($this->saleProducts as $saleProduct) {
             $totalAmount += $saleProduct->product->price * $saleProduct->amount;
         }
 
-        return [
+        $returnArray = [
             'sales_id' => $this->id,
             'amount' => $totalAmount,
-            'products' => SaleProductResource::collection($this->saleProducts)->map->toCustomArray(request())
+            'status' => config('constants.status.' . ($this->status ?? 1)),
         ];
+
+        if ($this->saleCancels->isNotEmpty()) {
+            $returnArray['reason_cancel'] = $this->saleCancels;
+        }
+
+        $returnArray['products'] = SaleProductResource::collection(
+            $this->saleProducts)->map->toCustomArray(request()
+        );
+
+        return $returnArray;
     }
 }
