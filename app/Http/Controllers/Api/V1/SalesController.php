@@ -12,6 +12,7 @@ use App\Http\Resources\V1\SaleResource;
 use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
 use App\Constants;
+use Illuminate\Support\Facades\Log;
 
 class SalesController extends Controller
 {
@@ -72,6 +73,7 @@ class SalesController extends Controller
             );            
 
         } catch (\Exception $e) {
+            Log::error('Erro ao cadastrar venda', $e->getMessage());
             return $this->error($e->getMessage(), 500, []);
         }
     }
@@ -131,13 +133,16 @@ class SalesController extends Controller
                 ['sale_id' => $id, 'observation' => $request->input('reason')]
             );         
 
+            Log::info("Venda cancelada.", ['user_id' => $request->user()->id,'sale_id' => $id]);
             return $this->response(
                 'Venda cancelada com sucesso', 
                 200, 
                 $saleCancel
             ); 
         } catch (\Exception $e) {
-            return $this->error('Erro ao cancelar a venda: ' . $e->getMessage(), 500, []);
+            $msg = 'Erro ao cancelar a venda: ';
+            Log::error($msg, $e->getMessage());
+            return $this->error($msg . $e->getMessage(), 500, []);
         }
     }
 
@@ -185,6 +190,7 @@ class SalesController extends Controller
             );
 
         } catch (\Exception $e) {
+            Log::error('Erro ao cadastrar venda (com produtos)', $e->getMessage());
             return $this->error($e->getMessage(), 500);
         }
     }
