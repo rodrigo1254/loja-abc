@@ -109,7 +109,6 @@ class SaleControllerTest extends TestCase
         $response->assertJson([
             'data' => [
                 'sales_id' => $sale->id,
-                // Incluir outros campos da venda conforme necessário
             ]
         ]);
     }
@@ -184,6 +183,9 @@ class SaleControllerTest extends TestCase
         $response->assertStatus(404);
     }
 
+    /**
+     * Testa exception do cancelamento
+     */
     public function test_cancel_with_exception()
     {
         // Forçar uma exceção

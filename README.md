@@ -13,7 +13,7 @@ A documetação está no link [documentation](https://documenter.getpostman.com/
 
 ### Executando Teste
 
-Possui um teste de exemplo de Cadastro de Venda e Cancelamento.
+Possui um teste de exemplo de Cadastro de Venda e Cancelamento. (São exemplos básicos de teste, reconhecendo a importância de uma implementação mais abrangente.)
 
 ```php artisan test --filter SaleControllerTest```
 
