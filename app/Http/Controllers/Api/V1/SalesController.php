@@ -38,7 +38,6 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         try {
-            $variavelNaoDefinida = $variavelInexistente;
             $validator = Validator::make($request->all(), [
                 'products' => 'required|array',
                 'products.*.product_id' => 'required',
