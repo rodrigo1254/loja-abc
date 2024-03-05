@@ -14,7 +14,25 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\User::factory(10)->create();
         
-        \App\Models\Product::factory(5)->create();
+        //\App\Models\Product::factory(5)->create();
+
+        \App\Models\Product::factory()->create([
+            'name' => 'Celular 1',
+            'price' => 1800,
+            'description' => 'Lorenzo Ipsulum',
+        ]);
+        
+        \App\Models\Product::factory()->create([
+            'name' => 'Celular 2',
+            'price' => 3200,
+            'description' => 'Lorem ipsum dolor',
+        ]);
+        
+        \App\Models\Product::factory()->create([
+            'name' => 'Celular 3',
+            'price' => 9800,
+            'description' => 'Lorem ipsum dolor sit amet',
+        ]);
 
         $product_id = \App\Models\Product::all()->random()->id;
         $product = \App\Models\Product::find($product_id);
